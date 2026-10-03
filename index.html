@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet">
 <style>
   :root{
     --morado:#3B1F4A;      /* chicha morada */
@@ -122,30 +123,47 @@
   footer{background:var(--tinta);color:#C9B8D2;padding:2rem 0;font-size:.95rem}
   footer .contenedor{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
  
-  /* ====== CHATBOT ====== */
-  .chat-abrir{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:50;width:64px;height:64px;border-radius:50%;border:none;background:var(--magenta);color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(59,31,74,.35);display:grid;place-items:center}
-  .chat-abrir:hover{background:#A3144C}
-  .chat-globo{position:absolute;right:72px;bottom:12px;background:#fff;color:var(--tinta);padding:.5rem .8rem;border-radius:10px;white-space:nowrap;font-size:.95rem;font-weight:500;box-shadow:0 4px 14px rgba(0,0,0,.15)}
-  .chat{position:fixed;right:20px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:50;width:min(380px,calc(100% - 40px));height:min(580px,calc(100% - 130px));background:#fff;border-radius:14px;box-shadow:0 18px 50px rgba(35,22,40,.35);display:none;flex-direction:column;overflow:hidden}
-  .chat.abierto{display:flex;animation:subir .25s ease-out}
-  @keyframes subir{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-  .chat-cab{background:var(--morado);color:#fff;padding:.9rem 1rem;display:flex;align-items:center;gap:.7rem}
-  .chat-cab .avatar{width:40px;height:40px;border-radius:50%;background:var(--azafran);display:grid;place-items:center;font-family:var(--serif);font-weight:800;color:var(--morado);font-size:1.2rem}
-  .chat-cab strong{display:block;font-family:var(--serif);font-size:1.1rem;line-height:1.1}
-  .chat-cab small{color:#C9F0E9}
-  .chat-cerrar{margin-left:auto;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;line-height:1}
-  .chat-cuerpo{flex:1;overflow-y:auto;padding:1rem;background:#F7F4F9;display:flex;flex-direction:column;gap:.6rem}
-  .msg{max-width:85%;padding:.6rem .85rem;border-radius:12px;font-size:.98rem;line-height:1.45;white-space:pre-line}
-  .msg.bot{background:#fff;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:3px}
-  .msg.user{background:var(--turquesa);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
-  .opciones{display:flex;flex-wrap:wrap;gap:.4rem}
-  .opcion{background:#fff;border:1px solid var(--morado-2);color:var(--morado);border-radius:999px;padding:.35rem .75rem;font:500 .88rem var(--sans);cursor:pointer;text-align:left}
-  .opcion:hover{background:var(--morado);color:#fff}
-  .opcion.destacada{background:var(--azafran);border-color:var(--azafran);color:var(--tinta);font-weight:700}
-  .chat-pie{display:flex;gap:.4rem;padding:.7rem;border-top:1px solid var(--borde);background:#fff}
-  .chat-pie input{flex:1;border:1px solid var(--borde);border-radius:999px;padding:.6rem .9rem;font:inherit;font-size:.95rem}
-  .chat-pie button{background:var(--morado);color:#fff;border:none;border-radius:999px;padding:0 1rem;font:700 .9rem var(--sans);cursor:pointer}
-  .escribiendo{font-style:italic;color:var(--gris);font-size:.9rem}
+  /* ====== CHATBOT n8n ====== */
+  :root{
+    --chat--color-primary:#C2185B;
+    --chat--color-primary-shade-50:#A3144C;
+    --chat--color-primary-shade-100:#8A1141;
+    --chat--color-secondary:#1F7A6E;
+    --chat--color-secondary-shade-50:#186358;
+    --chat--color-white:#ffffff;
+    --chat--color-light:#F7F4F9;
+    --chat--color-light-shade-50:#E6E0EA;
+    --chat--color-light-shade-100:#C9B8D2;
+    --chat--color-medium:#D2C6D8;
+    --chat--color-dark:#231628;
+    --chat--color-disabled:#6B5F70;
+    --chat--color-typing:#6B5F70;
+    --chat--font-family:"Alegreya Sans","Segoe UI",Roboto,Arial,sans-serif;
+    --chat--border-radius:14px;
+    --chat--window--width:380px;
+    --chat--window--height:580px;
+    --chat--header--background:#3B1F4A;
+    --chat--header--color:#ffffff;
+    --chat--heading--font-size:1.3em;
+    --chat--subtitle--line-height:1.4;
+    --chat--message--font-size:0.98rem;
+    --chat--message--bot--background:#ffffff;
+    --chat--message--bot--color:#231628;
+    --chat--message--user--background:#1F7A6E;
+    --chat--message--user--color:#ffffff;
+    --chat--toggle--size:64px;
+    --chat--toggle--background:#C2185B;
+    --chat--toggle--hover--background:#A3144C;
+    --chat--toggle--active--background:#8A1141;
+    --chat--toggle--color:#ffffff;
+  }
+  /* Emoji de chatbot en el botón flotante */
+  .chat-window-wrapper .chat-window-toggle{box-shadow:0 8px 24px rgba(59,31,74,.35)}
+  .chat-window-wrapper .chat-window-toggle svg{display:none}
+  .chat-window-wrapper .chat-window-toggle::before{content:"🤖";font-size:34px;line-height:1}
+  .chat-window-wrapper .chat-header h1::before{content:"🤖 "}
+  .chat-globo{position:fixed;right:96px;bottom:calc(34px + env(safe-area-inset-bottom,0px));z-index:9999;background:#fff;color:var(--tinta);padding:.5rem .8rem;border-radius:10px;white-space:nowrap;font-size:.95rem;font-weight:500;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer}
+  .chat-globo::after{content:"";position:absolute;right:-6px;top:50%;width:12px;height:12px;background:#fff;transform:translateY(-50%) rotate(45deg)}
  
   @media (max-width:860px){
     .portada .contenedor,.contacto-grid{grid-template-columns:1fr}
@@ -161,7 +179,6 @@
   }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
-    .chat.abierto{animation:none}
   }
 </style>
 </head>
@@ -277,24 +294,8 @@
   </div>
 </footer>
  
-<!-- ====== CHATBOT ====== -->
-<button class="chat-abrir" id="chatAbrir" aria-label="Abrir chat de ayuda" onclick="alternarChat()">
-  <span class="chat-globo" id="chatGlobo">¿Te ayudo a encontrar un libro?</span>
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-</button>
- 
-<div class="chat" id="chat" role="dialog" aria-label="Chat de Librerías Andinas OnLine">
-  <div class="chat-cab">
-    <div class="avatar">A</div>
-    <div><strong>Andina, asistente virtual</strong><small>En línea</small></div>
-    <button class="chat-cerrar" aria-label="Cerrar chat" onclick="alternarChat()">×</button>
-  </div>
-  <div class="chat-cuerpo" id="chatCuerpo" aria-live="polite"></div>
-  <form class="chat-pie" id="chatForm">
-    <input id="chatInput" autocomplete="off" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta">
-    <button type="submit">Enviar</button>
-  </form>
-</div>
+<!-- ====== CHATBOT n8n (el widget se inserta solo) ====== -->
+<div class="chat-globo" id="chatGlobo" onclick="abrirChat()">¿Te ayudo a encontrar un libro? 🤖</div>
  
 <script>
 /* ================= CONFIGURACIÓN ================= */
@@ -325,178 +326,7 @@ function pedirLibro(titulo, precio){
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`, "_blank");
 }
  
-/* ================= 10 PREGUNTAS DEL CHATBOT ================= */
-const faq = [
-  {p:"¿Cuál es su horario de atención?",
-   r:"Atendemos de lunes a sábado, de 9:00 a. m. a 7:00 p. m. Los pedidos web y por WhatsApp se reciben las 24 horas y se procesan al día siguiente hábil.",
-   k:["horario","hora","atienden","abren","cierran"]},
-  {p:"¿Hacen envíos a provincias?",
-   r:"Sí, enviamos a todo el Perú. Lima: 24 a 48 horas. Provincias: 2 a 5 días hábiles por agencia (Shalom, Olva u otra de tu preferencia).",
-   k:["envio","envío","provincia","delivery","despacho","llega","región","region"]},
-  {p:"¿Cuánto cuesta el envío?",
-   r:"En Huacho el envío es gratis por compras desde S/ 80. En Lima desde S/ 10 y a provincias desde S/ 15, según peso y destino. Te confirmamos el costo exacto antes de pagar.",
-   k:["costo","cuesta","precio del envio","cuanto","cuánto","tarifa"]},
-  {p:"¿Qué medios de pago aceptan?",
-   r:"Aceptamos Yape, Plin, transferencia BCP, Interbank o BBVA, tarjetas de crédito y débito, y pago contra entrega en Huacho.",
-   k:["pago","pagar","yape","plin","tarjeta","transferencia","deposito","depósito"]},
-  {p:"¿Cómo hago un pedido?",
-   r:"1) Elige tus libros en la web o envíanos tu lista.\n2) Te confirmamos stock y precio por WhatsApp.\n3) Realizas el pago.\n4) Enviamos tu pedido con su código de seguimiento.",
-   k:["pedido","comprar","compra","ordenar","como pido","cómo pido"]},
-  {p:"¿Venden textos escolares y plan lector?",
-   r:"Sí. Envíanos la lista de útiles o plan lector de tu colegio (foto o PDF) y te cotizamos todo en el día, con descuento por compras completas.",
-   k:["escolar","colegio","plan lector","lista","texto","primaria","secundaria","inicial"]},
-  {p:"¿Tienen libros universitarios?",
-   r:"Sí, tenemos libros de derecho, medicina, ingeniería, contabilidad, educación y preuniversitarios. Si no está en stock, lo importamos o conseguimos bajo pedido.",
-   k:["universitario","universidad","derecho","medicina","ingenieria","ingeniería","pre","academia"]},
-  {p:"¿Puedo encargar un libro que no ven en la web?",
-   r:"¡Claro! Dinos el título, autor o ISBN. Lo buscamos con nuestras editoriales y te damos precio y tiempo de entrega, normalmente de 3 a 10 días.",
-   k:["encargar","no encuentro","pedido especial","isbn","conseguir","buscar"]},
-  {p:"¿Tienen cambios o devoluciones?",
-   r:"Sí, aceptas cambios dentro de los 7 días de recibido el libro si llega con fallas de impresión o es distinto al pedido. El libro debe estar sin uso y con su comprobante.",
-   k:["cambio","devolucion","devolución","reclamo","fallado","garantia","garantía"]},
-  {p:"¿Emiten boleta o factura?",
-   r:"Sí, emitimos boleta o factura electrónica. Para factura indícanos tu RUC y razón social al momento de hacer el pedido.",
-   k:["boleta","factura","ruc","comprobante"]}
-];
- 
-/* ================= LÓGICA DEL CHAT ================= */
-const chat = document.getElementById("chat");
-const cuerpo = document.getElementById("chatCuerpo");
-const historial = [];          // conversación completa que se enviará
-let iniciado = false;
-let modoContacto = null;       // pasos para pedir los datos del cliente
-const cliente = {nombre:"", celular:"", consulta:""};
- 
-function alternarChat(){
-  chat.classList.toggle("abierto");
-  document.getElementById("chatGlobo").style.display = "none";
-  if (chat.classList.contains("abierto")){
-    if(!iniciado){ iniciarChat(); iniciado = true; }
-    document.getElementById("chatInput").focus();
-  }
-}
-function abrirChat(){ if(!chat.classList.contains("abierto")) alternarChat(); }
- 
-function agregar(texto, quien){
-  const d = document.createElement("div");
-  d.className = "msg " + quien;
-  d.textContent = texto;
-  cuerpo.appendChild(d);
-  cuerpo.scrollTop = cuerpo.scrollHeight;
-  historial.push((quien === "bot" ? "Andina: " : "Cliente: ") + texto);
-}
- 
-function botDice(texto, luego){
-  const e = document.createElement("div");
-  e.className = "escribiendo"; e.textContent = "Andina está escribiendo…";
-  cuerpo.appendChild(e); cuerpo.scrollTop = cuerpo.scrollHeight;
-  setTimeout(() => { e.remove(); agregar(texto, "bot"); if(luego) luego(); }, 550);
-}
- 
-function mostrarOpciones(){
-  const cont = document.createElement("div");
-  cont.className = "opciones";
-  faq.forEach((f, i) => {
-    const b = document.createElement("button");
-    b.className = "opcion"; b.type = "button"; b.textContent = f.p;
-    b.onclick = () => responderFaq(i);
-    cont.appendChild(b);
-  });
-  const h = document.createElement("button");
-  h.className = "opcion destacada"; h.type = "button";
-  h.textContent = "Hablar con un asesor";
-  h.onclick = () => { agregar("Quiero hablar con un asesor", "user"); pedirDatos(); };
-  cont.appendChild(h);
-  cuerpo.appendChild(cont);
-  cuerpo.scrollTop = cuerpo.scrollHeight;
-}
- 
-function iniciarChat(){
-  botDice("¡Hola! Soy Andina, de Librerías Andinas OnLine. 📚\nElige una pregunta o escríbeme lo que necesitas.", mostrarOpciones);
-}
- 
-function responderFaq(i){
-  agregar(faq[i].p, "user");
-  botDice(faq[i].r, () => botDice("¿Te ayudo con algo más? También puedo pasar tu consulta a un asesor.", mostrarOpciones));
-}
- 
-function normalizar(t){ return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
- 
-function buscarRespuesta(texto){
-  const t = normalizar(texto);
-  let mejor = -1, puntos = 0;
-  faq.forEach((f, i) => {
-    const p = f.k.filter(k => t.includes(normalizar(k))).length;
-    if (p > puntos){ puntos = p; mejor = i; }
-  });
-  return mejor;
-}
- 
-/* Captura de datos del cliente paso a paso */
-function pedirDatos(){
-  modoContacto = "nombre";
-  botDice("Con gusto te comunico con un asesor. ¿Cuál es tu nombre?");
-}
- 
-function procesarContacto(texto){
-  if (modoContacto === "nombre"){
-    cliente.nombre = texto; modoContacto = "celular";
-    botDice(`Gracias, ${texto}. ¿A qué número de celular te contactamos?`);
-  } else if (modoContacto === "celular"){
-    if (!/^\+?\d[\d\s]{7,14}$/.test(texto.trim())){
-      botDice("Ese número no parece válido. Escríbelo solo con dígitos, por ejemplo: 987654321.");
-      return;
-    }
-    cliente.celular = texto.trim(); modoContacto = "consulta";
-    botDice("Perfecto. Cuéntame tu consulta o el libro que buscas.");
-  } else if (modoContacto === "consulta"){
-    cliente.consulta = texto; modoContacto = null;
-    enviarConsulta();
-  }
-}
- 
-function enviarConsulta(){
-  const resumen =
-`Nueva consulta desde el chatbot – Librerías Andinas OnLine
-Nombre: ${cliente.nombre}
-Celular: ${cliente.celular}
-Consulta: ${cliente.consulta}
-Fecha: ${new Date().toLocaleString("es-PE")}`;
- 
-  // 1) Correo automático (FormSubmit)
-  enviarCorreo({
-    _subject: "Consulta del chatbot – " + cliente.nombre,
-    Nombre: cliente.nombre,
-    Celular: cliente.celular,
-    Consulta: cliente.consulta,
-    Conversacion: historial.join("\n")
-  }).then(ok => {
-    botDice(ok
-      ? "✅ Tu consulta fue enviada a nuestro correo. Un asesor te escribirá pronto."
-      : "No pude enviar el correo automáticamente, pero puedes enviarnos tu consulta por WhatsApp con el botón de abajo.");
-  });
- 
-  // 2) WhatsApp (abre el chat con el mensaje ya escrito)
-  botDice("Para atenderte más rápido, envíanos también tu consulta por WhatsApp:", () => {
-    const cont = document.createElement("div");
-    cont.className = "opciones";
-    const w = document.createElement("a");
-    w.className = "opcion destacada";
-    w.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(resumen)}`;
-    w.target = "_blank"; w.rel = "noopener";
-    w.textContent = "Enviar por WhatsApp";
-    w.style.textDecoration = "none";
-    const m = document.createElement("a");
-    m.className = "opcion";
-    m.href = `mailto:${CORREO}?subject=${encodeURIComponent("Consulta – " + cliente.nombre)}&body=${encodeURIComponent(resumen)}`;
-    m.textContent = "Enviar por correo";
-    m.style.textDecoration = "none";
-    cont.append(w, m);
-    cuerpo.appendChild(cont);
-    cuerpo.scrollTop = cuerpo.scrollHeight;
-  });
-}
- 
+/* ================= CORREO DEL FORMULARIO (FormSubmit) ================= */
 async function enviarCorreo(datos){
   try{
     const r = await fetch(FORMSUBMIT, {
@@ -509,35 +339,15 @@ async function enviarCorreo(datos){
   }catch(e){ return false; }
 }
  
-document.getElementById("chatForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const input = document.getElementById("chatInput");
-  const texto = input.value.trim();
-  if(!texto) return;
-  input.value = "";
-  agregar(texto, "user");
- 
-  if (modoContacto){ procesarContacto(texto); return; }
- 
-  const t = normalizar(texto);
-  if (/asesor|humano|persona|whatsapp|llamar|contact/.test(t)){ pedirDatos(); return; }
-  if (/^(hola|buenas|buenos|hey|saludos)/.test(t)){
-    botDice("¡Hola! ¿En qué te ayudo? Elige una opción o escribe tu pregunta.", mostrarOpciones); return;
-  }
-  if (/gracias/.test(t)){ botDice("¡Gracias a ti! Que disfrutes tu lectura. 📖"); return; }
- 
-  const i = buscarRespuesta(texto);
-  if (i >= 0){
-    botDice(faq[i].r, () => botDice("¿Algo más? Puedes elegir otra pregunta.", mostrarOpciones));
-  } else {
-    cliente.consulta = texto;
-    botDice("No tengo esa respuesta a la mano, pero un asesor sí. Te pediré unos datos para que te contacte.", () => {
-      modoContacto = "nombre";
-      botDice("¿Cuál es tu nombre?");
-      // Al terminar, la consulta original se conserva en el historial
-    });
-  }
-});
+/* Abre el chat de n8n desde cualquier botón de la página */
+function abrirChat(){
+  const globo = document.getElementById("chatGlobo");
+  if (globo) globo.remove();
+  const ventana = document.querySelector(".chat-window-wrapper .chat-window");
+  const abierta = ventana && getComputedStyle(ventana).display !== "none";
+  const toggle = document.querySelector(".chat-window-wrapper .chat-window-toggle");
+  if (toggle && !abierta) toggle.click();
+}
  
 /* ================= FORMULARIO DE CONTACTO ================= */
 document.getElementById("formContacto").addEventListener("submit", async e => {
@@ -568,6 +378,44 @@ menuBtn.onclick = () => {
 };
 menu.querySelectorAll("a").forEach(a => a.onclick = () => menu.classList.remove("visible"));
 document.getElementById("anio").textContent = new Date().getFullYear();
+</script>
+ 
+<!-- ====== WIDGET DE CHAT n8n ====== -->
+<script type="module">
+  import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+ 
+  createChat({
+    webhookUrl: "https://proyecto-agente.app.n8n.cloud/webhook/b7e6c1a2-5d3f-4c8e-9a10-libreria0001/chat",
+    mode: "window",
+    showWelcomeScreen: false,
+    loadPreviousSession: true,
+    chatInputKey: "chatInput",
+    chatSessionKey: "sessionId",
+    metadata: { sitio: "Librerías Andinas OnLine" },
+    defaultLanguage: "en",
+    initialMessages: [
+      "¡Hola! 🤖📚 Soy Andina, la asistente de Librerías Andinas OnLine.",
+      "¿Qué libro buscas o en qué te puedo ayudar?"
+    ],
+    i18n: {
+      en: {
+        title: "Andina, asistente virtual",
+        subtitle: "Respondemos tus consultas al instante. Lunes a sábado, 9 a. m. a 7 p. m.",
+        footer: "",
+        getStarted: "Nueva conversación",
+        inputPlaceholder: "Escribe tu pregunta…",
+        closeButtonTooltip: "Cerrar chat"
+      }
+    }
+  });
+ 
+  // Oculta el globo de bienvenida cuando el cliente abre el chat
+  document.addEventListener("click", e => {
+    if (e.target.closest(".chat-window-toggle")) {
+      const g = document.getElementById("chatGlobo");
+      if (g) g.remove();
+    }
+  });
 </script>
 </body>
 </html>
